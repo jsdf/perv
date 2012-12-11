@@ -1,0 +1,12 @@
+{
+  "database": {
+    "db": "username_perv",
+    "user": "root",
+    "pass": "dhm3d14",
+    "options" : {
+      "logging": false
+    }
+  }
+, "watch_path" : "/home/username/sites/"
+, "viewer_port" : 6xxxx
+}
