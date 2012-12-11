@@ -13,7 +13,7 @@
         var link = $(this);
         $.getJSON(link.attr('href'), function(day){
           link.parent().find('> ul').remove();
-          link.parent().append(buildSubmenu(day, '/home/james/sites'));
+          link.parent().append(buildSubmenu(day, perv_client_data.base_watch_path));
         })
         return false;
       })
@@ -38,18 +38,11 @@
         events_grouped[event_base].push(events[event]);
       }
     }
-    console.log('groupEventsByDir')
-    console.log(events)
-    console.log(base_path)
-    console.log(events_grouped)
     return events_grouped;
   }
 
   function buildSubmenu(events, base_path) {
     var events_grouped = groupEventsByDir(events, base_path);
-    console.log('buildSubmenu')
-      console.log(events)
-      console.log(base_path)
 
     var list = $('<ul></ul>').data('perv-events-groups', events);
 

@@ -9,6 +9,10 @@ var config = require('./config.json');
 var store = new PervStore(config.database);
 
 app.get('/', function(req, res) {
+  var client_data = {
+    base_watch_path: config.watch_path
+  };
+
   var body = [
     '<html><head>',
     '<title>perv viewer</title>',
@@ -16,6 +20,7 @@ app.get('/', function(req, res) {
     '<script src="js/jquery-1.8.2.js"></script>',
     '<script src="js/moment.js"></script>',
     '<script src="js/perv-viewer-client.js"></script>',
+    '<script>perv_client_data = ',JSON.stringify(client_data),'</script>',
     '</head><body><h1>lets have a perv</h1></body></html>',
   ].join('');
 

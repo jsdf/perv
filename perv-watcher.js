@@ -9,7 +9,7 @@ var config = require('./config.json');
 
 var store = new PervStore(config.database);
 
-var watch_path = config.watch_path || '~/sites/';
+var watch_path = config.watch_path || '~/sites';
 
 var paths_find_process = exec('find ' + watch_path + ' -type d ! -path \*.git\*', {maxBuffer: 1024*1024*1024}, function (error, stdout, stderr) {
   if (error) {
