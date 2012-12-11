@@ -9,11 +9,15 @@ var config = require('./config.json');
 var store = new PervStore(config.database);
 
 app.get('/', function(req, res) {
-  var body = '<html><head>'
-    +'<title>perv viewer</title>'
-    +'<script src="js/jquery-1.8.2.js"></script>'
-    +'<script src="js/perv-viewer-client.js"></script>'
-    +'</head><body>hello</body></html>';
+  var body = [
+    '<html><head>',
+    '<title>perv viewer</title>',
+    '<link rel="stylesheet" type="text/css" href="/css/perv.css"></link>',
+    '<script src="js/jquery-1.8.2.js"></script>',
+    '<script src="js/moment.js"></script>',
+    '<script src="js/perv-viewer-client.js"></script>',
+    '</head><body><h1>lets have a perv</h1></body></html>',
+  ].join('');
 
   res.send(body);
 });
@@ -22,10 +26,9 @@ app.get('/day', function(req, res) {
   store.listDates(function(rows) {
 
     var dates = rows.map(function(row){
-      var date = [row.date.getFullYear(), row.date.getMonth()+1, row.date.getDate()].join('-');
       return {
-        url :'/day/' + date
-      , date : date
+        url :'/day/' + [row.date.getFullYear(), row.date.getMonth()+1, row.date.getDate()].join('-')
+      , date : row.date
       };
     });
 

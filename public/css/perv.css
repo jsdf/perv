@@ -1,0 +1,17 @@
+p, a {
+	font-family: "Helvetica", sans-serif;
+	margin: 0;
+	padding: 0;
+}
+
+a {
+	text-decoration: none;
+}
+
+ul {
+	list-style: none;
+}
+
+#days > li > a, .directory-name {
+	font-size: 24px;
+}

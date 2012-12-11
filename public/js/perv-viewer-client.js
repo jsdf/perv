@@ -1,16 +1,19 @@
 (function($){
   $(function(){
+    var body = $(document.body);
+    body.css('font-family', 'sans-serif')
     $.getJSON('/day', function(days) {
-      var body = $(document.body);
       body.append($('<ul id="days">'
       + days.map(function(day){
-        return ['<li><a href="',day.url,'">',day.date,'</a></li>'].join('');
+        return ['<li><a href="',day.url,'">',moment(day.date).format('YYYY-MM-DD (dddd)'),'</a></li>'].join('');
       }).join('')
       + '</ul>'));
 
-      $('#days li a').click(function(e){
-        $.getJSON($(this).attr('href'), function(day){
-          console.log(groupEventsByDir(day, '/home/james/sites/'));
+      $('#days > li > a').click(function(e){
+        var link = $(this);
+        $.getJSON(link.attr('href'), function(day){
+          link.parent().find('> ul').remove();
+          link.parent().append(buildSubmenu(day, '/home/james/sites'));
         })
         return false;
       })
@@ -20,17 +23,64 @@
 
   function groupEventsByDir(events, base_path) {
     var escaped_base_path = base_path.replace(/\//g,'\\\/');
-    var path_match = new RegExp('(' +escaped_base_path+ '[^\\/]+)');
+    var path_match = new RegExp('(' +escaped_base_path+ '\/[^\\/]+)');
 
     var events_grouped = {};
     for (var event in events) {
-      var event_base = events[event].watch_path.match(path_match);
+      var matches = events[event].watch_path.match(path_match);
+      if (!matches) {
+        continue;
+      }
+      var event_base = matches[0];
       if (typeof(events_grouped[event_base]) === 'undefined') {
         events_grouped[event_base] = [];
       } else {
         events_grouped[event_base].push(events[event]);
       }
     }
+    console.log('groupEventsByDir')
+    console.log(events)
+    console.log(base_path)
+    console.log(events_grouped)
     return events_grouped;
   }
+
+  function buildSubmenu(events, base_path) {
+    var events_grouped = groupEventsByDir(events, base_path);
+    console.log('buildSubmenu')
+      console.log(events)
+      console.log(base_path)
+
+    var list = $('<ul></ul>').data('perv-events-groups', events);
+
+    for (var group in events_grouped) {
+      var event_group = events_grouped[group];
+
+      
+      var item = $('<li></li>');
+      item.append($('<p></p>').text(getPathLeafDirectory(group)).addClass('directory-name'));
+      item.append($('<p></p>').text('first: ' + moment(event_group[0].createdAt).format('h:mm:ss a') + ' (' + event_group[0].filename + ')'));
+      item.append($('<p></p>').text('last: ' + moment(event_group[event_group.length-1].createdAt).format('h:mm:ss a')  + ' (' + event_group[event_group.length-1].filename + ')'));
+
+      //next level of tree
+      item.data('perv-events', event_group).data('perv-group-path', group).click(function(e) {
+        current_item = $(this);
+        current_item.find('> ul').remove();
+        current_item.append(buildSubmenu(current_item.data('perv-events'), current_item.data('perv-group-path')));
+        return false;
+      });
+      list.append(item);
+    }
+    return list;
+    
+  }
+
+  function getPathLeafDirectory(path) {
+    var matches = path.match(/^.*\/(.+?)$/);
+    if (matches) {
+      return matches[1];
+    }
+  }
+
+
 })(jQuery);
