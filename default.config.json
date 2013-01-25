@@ -1,0 +1,12 @@
+{
+  "database": {
+    "db": "database_name",
+    "user": "db_username",
+    "pass": "db_pass",
+    "options" : {
+      "logging": false
+    }
+  }
+, "watch_path" : "/home/username"
+, "viewer_port" : 61234
+}
