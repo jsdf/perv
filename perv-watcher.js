@@ -33,8 +33,9 @@ function perv_watch(watch_paths, event_callback) {
   var inotify = Inotify.create(true); // stand-alone, persistent mode, runs until you hit ctrl+c
 
   var watch_options = {
-    all_events_is_catchall: true // by default (false) "all_events" only catches events already listened for.
-                                 // this option tells "all_events" to catch all events, period.
+    // by default (false) "all_events" only catches events already listened for.
+    // this option tells "all_events" to catch all events, period.
+    all_events_is_catchall: true
   , onlydir: true
   }
   var watch_directive = {
