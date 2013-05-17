@@ -27,9 +27,12 @@ PervStore.prototype.findAll = function(conditions, callback) {
 };
 
 PervStore.prototype.listDates = function(callback) {
-  this.db.query('SELECT DISTINCT DATE(`createdAt`) as date FROM events ORDER BY createdAt DESC', null, { raw: true }).success(callback).error(function(error) {
-    console.error(error);
-  });
+  var query = 'SELECT DISTINCT DATE(`createdAt`) as date FROM events ORDER BY createdAt DESC';
+  this.db.query(query, null, { raw: true })
+    .success(callback)
+    .error(function(error) {
+      console.error(error);
+    });
 };
 
 PervStore.prototype.getDay = function(date, callback) {
