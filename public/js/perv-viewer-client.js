@@ -18,7 +18,6 @@
         return false;
       })
     });
-
   });
 
   function groupEventsByDir(events, base_path) {
@@ -34,9 +33,8 @@
       var event_base = matches[0];
       if (typeof(events_grouped[event_base]) === 'undefined') {
         events_grouped[event_base] = [];
-      } else {
-        events_grouped[event_base].push(events[event]);
       }
+      events_grouped[event_base].push(events[event]);
     }
     return events_grouped;
   }
@@ -49,11 +47,12 @@
     for (var group in events_grouped) {
       var event_group = events_grouped[group];
 
-      
       var item = $('<li></li>');
       item.append($('<p></p>').text(getPathLeafDirectory(group)).addClass('directory-name'));
-      item.append($('<p></p>').text('first: ' + moment(event_group[0].createdAt).format('h:mm:ss a') + ' (' + event_group[0].filename + ')'));
-      item.append($('<p></p>').text('last: ' + moment(event_group[event_group.length-1].createdAt).format('h:mm:ss a')  + ' (' + event_group[event_group.length-1].filename + ')'));
+      if (event_group.length) {
+        item.append($('<p></p>').text('first: ' + moment(event_group[0].createdAt).format('h:mm:ss a') + ' (' + event_group[0].filename + ')'));
+        item.append($('<p></p>').text('last: ' + moment(event_group[event_group.length-1].createdAt).format('h:mm:ss a')  + ' (' + event_group[event_group.length-1].filename + ')'));
+      }
 
       //next level of tree
       item.data('perv-events', event_group).data('perv-group-path', group).click(function(e) {
@@ -74,6 +73,4 @@
       return matches[1];
     }
   }
-
-
 })(jQuery);
