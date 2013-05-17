@@ -3,8 +3,8 @@ of your time.
 
 to get started, create an empty database for perv and then copy 
 default.config.json to config.json, editing it to contain access details
-for your database, the absolute path to your sites directory and also the
-port you want the 'viewer' web app to run on.
+for your database, the absolute path to the root directory of the tree you want
+to watch, and also the port you want the 'viewer' web app to run on.
 
 to begin logging events, run 'node perv-watcher.js'. to view logged events,
 run 'node perv-viewer.js' and point your web browser to the machine and port
