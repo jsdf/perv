@@ -10,7 +10,6 @@ var store = new PervStore(config.database);
 var base_watch_path = config.watch_path || '~/sites';
 
 
-// GENERIC FIND
 // find all directories recursively under a base path, returning an array of paths
 function perv_find_paths(base_path, callback) {
   var find_command = 'find ' + base_watch_path + ' -type d ! -path \*.git\*';
@@ -27,7 +26,6 @@ function perv_find_paths(base_path, callback) {
   });
 }
 
-// GENERIC WATCH
 // set up watchers for an array of paths
 function perv_watch(watch_paths, event_callback) {
   var inotify = Inotify.create(true); // stand-alone, persistent mode, runs until you hit ctrl+c
