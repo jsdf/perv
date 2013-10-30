@@ -39,3 +39,5 @@ dist
 
 # app
 config.json
+node_modules/
+*.db

@@ -1,0 +1,14 @@
+{
+  "database": {
+    "db": "",
+    "user": "",
+    "pass": "",
+    "options" : {
+      "logging": false,
+      "dialect": "sqlite",
+      "storage": "perv.db"
+    }
+  }
+, "watch_path" : "~/dev/"
+, "viewer_port" : 8080
+}
