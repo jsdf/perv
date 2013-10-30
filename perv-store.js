@@ -11,12 +11,13 @@ function PervStore(config) {
 }
 
 PervStore.prototype.write = function(ev) {
+  console.log('saving',ev);
   this.Event.build({
     watch_path: ev.watch
   , type : ev.masks[0]
   , filename : ev.name
   }).save().error(function(error) {
-    console.error(error);
+    console.error('error saving',ev,error);
   });
 };
 

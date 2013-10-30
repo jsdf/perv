@@ -4,9 +4,10 @@
     "user": "db_username",
     "pass": "db_pass",
     "options" : {
-      "logging": false
+      "logging": false,
+      "host": "127.0.0.1"
     }
-  }
-, "watch_path" : "~/dev/"
-, "viewer_port" : 8080
+  },
+  "watch_path" : "~/dev",
+  "viewer_port" : 8080
 }

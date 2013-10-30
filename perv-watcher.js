@@ -1,7 +1,6 @@
 var sys = require('sys')
 var fs = require('fs')
 var exec = require('child_process').exec;
-var Inotify = require('inotify-plusplus');
 
 var PervStore  = require('./perv-store.js');
 
@@ -28,35 +27,64 @@ function perv_find_paths(base_path, callback) {
 
 // set up watchers for an array of paths
 function perv_watch(watch_paths, event_callback) {
-  var inotify = Inotify.create(true); // stand-alone, persistent mode, runs until you hit ctrl+c
+  var new_watch;
 
-  var watch_options = {
-    // by default (false) "all_events" only catches events already listened for.
-    // this option tells "all_events" to catch all events, period.
-    all_events_is_catchall: true
-  , onlydir: true
-  }
-  var watch_directive = {
-    close_write: event_callback,
-    modify: event_callback,
-    moved_from: true
+  try {
+    var Inotify = require('inotify-plusplus');
+  }  catch (e) {
+    console.warn(e);
   }
 
-  var new_watch = function(path) {
-    try {
-      inotify.watch(watch_directive, path, watch_options);
-    } catch (e) {
-      console.error(e);
+  // use inotify if available, otherwise use fs.watch
+  if (Inotify) {
+    var inotify = Inotify.create(true); // stand-alone, persistent mode, runs until you hit ctrl+c
+
+    var watch_options = {
+      // by default (false) "all_events" only catches events already listened for.
+      // this option tells "all_events" to catch all events, period.
+      all_events_is_catchall: true
+    , onlydir: true
+    }
+    var watch_directive = {
+      close_write: event_callback,
+      modify: event_callback,
+      moved_from: true
+    }
+
+    new_watch = function(path) {
+      try {
+        inotify.watch(watch_directive, path, watch_options);
+      } catch (e) {
+        console.error(e);
+      }
+    }
+
+    watch_directive.create = function(ev) {
+      var path = ev.watch+'/'+ev.name;
+      fs.stat(path, function(err, stats) {
+        if (err) console.error(err);
+        else if (stats.isDirectory()) new_watch(path);
+      });
+    };
+  } else {
+    new_watch = function(path) {
+      try {
+        fs.watch(path, function (event, filename) {
+          console.log(event, filename);
+          if (event == 'change') {
+            normalised_ev = {
+              watch: path,
+              masks: [event],
+              name: filename
+            };
+            event_callback(normalised_ev);
+          }
+        });
+      } catch (e) {
+        console.error(e);
+      }
     }
   }
-
-  watch_directive.create = function(ev) {
-    var path = ev.watch+'/'+ev.name;
-    fs.stat(path, function(err, stats) {
-      if (err) console.error(err);
-      else if (stats.isDirectory()) new_watch(path);
-    });
-  };
 
   watch_paths.forEach(new_watch);
 }
@@ -72,6 +100,7 @@ perv_find_paths(base_watch_path, function(error, watch_paths){
     perv_watch(watch_paths, function log_event(ev) {
       // ignore temporary files
       if (ev.name.indexOf('.tmp', ev.name.length - 4) > -1) return;
+      console.log(ev)
       store.write(ev);
     });
   }

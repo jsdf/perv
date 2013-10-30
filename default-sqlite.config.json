@@ -8,7 +8,7 @@
       "dialect": "sqlite",
       "storage": "perv.db"
     }
-  }
-, "watch_path" : "~/dev/"
-, "viewer_port" : 8080
+  },
+  "watch_path" : "~/dev",
+  "viewer_port" : 8080
 }
