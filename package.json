@@ -1,11 +1,15 @@
 {
-  "name": "perv"
-, "description": "log and view filesystem activity"
-, "version": "0.0.1"
-, "private": true
-, "dependencies": {
-    "express": "3.x"
-  , "inotify-plusplus": "1.0.1"
-  , "sequelize" : "1.6.0-beta4"
+  "name": "perv",
+  "description": "log and view filesystem activity",
+  "version": "0.0.1",
+  "private": true,
+  "dependencies": {
+    "express": "3.x",
+    "chokidar": "^0.8.2",
+    "lem": "^0.4.2",
+    "level": "^0.18.0",
+    "minimist": "^0.2.0",
+    "moment": "^2.7.0",
+    "concat-stream": "^1.4.6"
   }
 }
